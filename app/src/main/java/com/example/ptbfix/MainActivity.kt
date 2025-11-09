@@ -30,6 +30,11 @@ import androidx.navigation.compose.rememberNavController
 // Import komponen kustom
 import com.example.ptbfix.navigation.Screen
 import com.example.ptbfix.ui.theme.PTBfixTheme
+import com.example.ptbfix.ui.screens.AbsenScreen
+import com.example.ptbfix.ui.screens.EventScreen
+import com.example.ptbfix.ui.screens.HomeScreen
+import com.example.ptbfix.ui.screens.ListScreen
+import com.example.ptbfix.ui.screens.TeamScreen
 
 /**
  * Komponen utama yang menangani navigasi antar layar dalam aplikasi.
@@ -148,59 +153,29 @@ fun MainScreen() {
             }
         }
     ) { innerPadding ->
-        // NavHost menangani tampilan layar yang aktif berdasarkan rute saat ini
+        // Menggunakan NavHost untuk menangani navigasi antar layar
         NavHost(
             navController = navController,
-            startDestination = Screen.Home.route,  // Layar yang pertama kali ditampilkan
-            modifier = Modifier.padding(innerPadding)  // Menerapkan padding dari Scaffold
+            startDestination = Screen.Home.route,
+            modifier = Modifier.padding(innerPadding)
         ) {
-            // Mendefinisikan semua layar yang dapat dinavigasi
-            // Setiap composable di sini akan ditampilkan di area konten utama
-            composable(Screen.Home.route) { Greeting("Home") }
-            composable(Screen.Absen.route) { Greeting("Absen") }
-            composable(Screen.Event.route) { Greeting("Event") }
-            composable(Screen.List.route) { Greeting("Daftar") }
-            composable(Screen.Team.route) { Greeting("Tim") }
+            // Mendefinisikan rute untuk setiap layar
+            composable(Screen.Home.route) { 
+                HomeScreen()
+            }
+            composable(Screen.List.route) { 
+                ListScreen()
+            }
+            composable(Screen.Team.route) { 
+                TeamScreen()
+            }
+            composable(Screen.Event.route) { 
+                EventScreen()
+            }
+            composable(Screen.Absen.route) { 
+                AbsenScreen()
+            }
         }
-    }
-}
-
-/**
- * Komponen sambutan sederhana yang menampilkan nama layar.
- * 
- * @param screenName Nama layar yang akan ditampilkan
- * @param modifier Modifier untuk menyesuaikan tampilan
- */
-@Composable
-fun Greeting(screenName: String, modifier: Modifier = Modifier) {
-    // Column untuk menata konten secara vertikal
-    Column(
-        modifier = Modifier
-            .fillMaxSize()  // Mengisi seluruh ruang yang tersedia
-            .padding(16.dp),  // Memberi jarak dari tepi
-        verticalArrangement = Arrangement.Center,  // Posisi vertikal di tengah
-        horizontalAlignment = Alignment.CenterHorizontally  // Posisi horizontal di tengah
-    ) {
-        // Menampilkan teks dengan nama layar
-        Text(
-            text = "Halaman $screenName",
-            style = MaterialTheme.typography.headlineMedium,  // Menggunakan gaya teks dari tema
-            modifier = modifier
-        )
-    }
-}
-
-/**
- * Preview untuk komponen Greeting.
- * Hanya untuk keperluan pratinjau di Android Studio.
- */
-@Preview(showBackground = true)  // Menampilkan latar belakang di preview
-@Composable
-fun GreetingPreview() {
-    // Menerapkan tema yang sama dengan aplikasi
-    PTBfixTheme {
-        // Menampilkan komponen Greeting dengan teks "Preview"
-        Greeting("Preview")
     }
 }
 

@@ -1,15 +1,14 @@
 package com.example.ptbfix.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.example.ptbfix.R
+import com.example.ptbfix.ui.components.AppTopBar
 import com.example.ptbfix.ui.theme.PTBfixTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -17,38 +16,28 @@ import com.example.ptbfix.ui.theme.PTBfixTheme
 fun HomeScreen() {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Beranda") },
-                navigationIcon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.home),
-                        contentDescription = "Beranda",
-                        modifier = Modifier
-                            .padding(start = 16.dp)
-                            .size(24.dp)
-                    )
-                }
-            )
+            AppTopBar(title = "Beranda")
         }
     ) { padding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding),
+                .padding(padding)
+                .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
-            Text("Welcome Halaman Home")
+            // Konten halaman bisa ditambahkan di sini
         }
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     PTBfixTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
+            color = Color.White
         ) {
             HomeScreen()
         }
