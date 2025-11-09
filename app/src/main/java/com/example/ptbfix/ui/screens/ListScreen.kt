@@ -21,6 +21,20 @@ fun ListScreen() {
     Scaffold(
         topBar = {
             AppTopBar(title = "Daftar")
+        },
+        floatingActionButton = {
+            // Tombol Tambah di pojok kanan bawah
+            FloatingActionButton(
+                onClick = { /* Aksi saat tombol tambah diklik */ },
+                containerColor = Color(0xFF2196F3),
+                contentColor = Color.White
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.tambah),
+                    contentDescription = "Tambah Data",
+                    modifier = Modifier.size(24.dp)
+                )
+            }
         }
     ) { padding ->
         Column(
