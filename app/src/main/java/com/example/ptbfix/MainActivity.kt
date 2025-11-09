@@ -1,13 +1,9 @@
-// Mendeklarasikan package tempat file ini berada
 package com.example.ptbfix
 
-// Import library Android
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-
-// Import library Compose UI
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -19,15 +15,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-
-// Import Navigation Component
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-
-// Import komponen kustom
 import com.example.ptbfix.navigation.Screen
 import com.example.ptbfix.ui.theme.PTBfixTheme
 import com.example.ptbfix.ui.screens.AbsenScreen
@@ -179,20 +171,10 @@ fun MainScreen() {
     }
 }
 
-/**
- * Activity utama aplikasi.
- * Merupakan titik masuk utama aplikasi Android.
- */
 class MainActivity : ComponentActivity() {
-    /**
-     * Dipanggil saat activity dibuat.
-     * 
-     * @param savedInstanceState State yang disimpan sebelumnya, null jika tidak ada
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        // Mengaktifkan edge-to-edge display (konten di belakang system bars)
         enableEdgeToEdge()
         
         // Menetapkan konten UI menggunakan Jetpack Compose

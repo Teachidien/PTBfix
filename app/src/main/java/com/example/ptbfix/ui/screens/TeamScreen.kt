@@ -14,14 +14,9 @@ import com.example.ptbfix.R
 import com.example.ptbfix.ui.components.AppTopBar
 import com.example.ptbfix.ui.theme.PTBfixTheme
 
-/**
- * Composable function yang menampilkan halaman Tim
- * Menggunakan Material3 dan experimental API dari Compose
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TeamScreen() {
-    // Menerapkan tema kustom PTBfix
     PTBfixTheme {
         Scaffold(
             topBar = {
@@ -61,10 +56,6 @@ fun TeamScreen() {
     }
 }
 
-/**
- * Preview Composable untuk menampilkan pratinjau TeamScreen di Android Studio
- * @showBackground - Menampilkan latar belakang di preview
- */
 @Preview(showBackground = true)
 @Composable
 fun TeamScreenPreview() {

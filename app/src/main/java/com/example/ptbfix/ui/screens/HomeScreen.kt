@@ -26,7 +26,6 @@ fun HomeScreen() {
                 .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
-            // Konten halaman bisa ditambahkan di sini
         }
     }
 }
