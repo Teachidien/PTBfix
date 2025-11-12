@@ -20,6 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.ptbfix.data.api.RetrofitClient
 import com.example.ptbfix.navigation.Screen
 import com.example.ptbfix.ui.theme.PTBfixTheme
 import com.example.ptbfix.ui.screens.AbsenScreen
@@ -27,6 +28,8 @@ import com.example.ptbfix.ui.screens.EventScreen
 import com.example.ptbfix.ui.screens.HomeScreen
 import com.example.ptbfix.ui.screens.ListScreen
 import com.example.ptbfix.ui.screens.TeamScreen
+import android.util.Log
+import kotlinx.coroutines.launch
 
 /**
  * Komponen utama yang menangani navigasi antar layar dalam aplikasi.
@@ -169,7 +172,35 @@ fun MainScreen() {
             }
         }
     }
+    val scope = rememberCoroutineScope()
+    var serverMessage by remember { mutableStateOf(" ") }
+
+    LaunchedEffect(Unit) {
+        scope.launch {
+            try {
+                val response = RetrofitClient.apiService.testConnection()
+                if (response.isSuccessful) {
+                    val message = response.body()?.message ?: "Tidak ada pesan"
+                    serverMessage = "Terhubung ke server: $message"
+                    Log.d("SERVER_TEST", "Success: $message")
+                } else {
+                    serverMessage = "Gagal: ${response.code()}"
+                    Log.e("SERVER_TEST", "Error: ${response.code()}")
+                }
+            } catch (e: Exception) {
+               // serverMessage = "Koneksi gagal: ${e.message}"
+               // Log.e("SERVER_TEST", "Exception: ${e.message}")
+            }
+        }
+    }
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text = serverMessage, style = MaterialTheme.typography.titleMedium)
+    }
 }
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

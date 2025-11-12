@@ -13,7 +13,12 @@ interface ApiService {
     @GET("endpoint")
     suspend fun getData(): Response<ApiResponse<Any>>
 
+    @GET("ping.php")
+    suspend fun testConnection(): Response<ServerResponse>
     // Add more endpoints as needed
     // @POST("login")
     // suspend fun login(@Body loginRequest: LoginRequest): Response<ApiResponse<LoginResponse>>
 }
+data class ServerResponse(
+    val message: String
+)
