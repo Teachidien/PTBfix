@@ -7,7 +7,7 @@ import android.content.Context
 
 @Database(
     entities = [User::class, Note::class, Atlet::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -28,6 +28,7 @@ abstract class AppDatabase : RoomDatabase() {
                     "ptbfix_database"
                 )
                 .fallbackToDestructiveMigration()
+                .allowMainThreadQueries() // Untuk debugging
                 .build()
                 INSTANCE = instance
                 instance

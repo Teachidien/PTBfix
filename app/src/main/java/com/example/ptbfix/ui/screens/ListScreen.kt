@@ -2,6 +2,10 @@ package com.example.ptbfix.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,8 +20,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.ptbfix.R
+import com.example.ptbfix.data.local.Atlet
+import com.example.ptbfix.ui.components.AddAtletDialog
 import com.example.ptbfix.ui.components.AppTopBar
 import com.example.ptbfix.ui.components.AtletList
+import com.example.ptbfix.ui.components.EditAtletDialog
 import com.example.ptbfix.ui.theme.PTBfixTheme
 import com.example.ptbfix.ui.viewmodel.AtletViewModel
 
@@ -29,42 +36,45 @@ import com.example.ptbfix.ui.viewmodel.AtletViewModel
 fun ListScreen(
     atletViewModel: AtletViewModel = hiltViewModel()
 ) {
-    // State untuk menentukan apakah yang ditampilkan adalah daftar atlet (true) atau pengurus (false)
-    var showAtlet by remember { mutableStateOf(true) }
+    // State untuk dialog tambah atlet
+    var showAddDialog by remember { mutableStateOf(false) }
     
-    // Collect state dari ViewModel
+    // State untuk dialog edit atlet
+    var showEditDialog by remember { mutableStateOf(false) }
+    var selectedAtlet by remember { mutableStateOf<Atlet?>(null) }
+    
+    // Mengumpulkan state dari ViewModel
     val atlets by atletViewModel.atlets.collectAsState()
     val isLoading by atletViewModel.isLoading.collectAsState()
+    
+    // State untuk toggle antara Atlet dan Pengurus
+    var showAtlet by remember { mutableStateOf(true) }
     
     // Scaffold sebagai layout utama yang menyediakan struktur dasar Material Design
     // termasuk AppBar, FloatingActionButton, dll.
     Scaffold(
         // AppBar di bagian atas layar
         topBar = {
-            AppTopBar(title = "Daftar")  // Menampilkan judul "Daftar" di AppBar
+            AppTopBar(title = if (showAtlet) "Daftar Atlet" else "Daftar Pengurus")  // Title dinamis
         }
     ) { padding ->
-        // Kolom utama untuk menata konten secara vertikal
         Column(
             modifier = Modifier
-                .fillMaxSize()  // Mengisi seluruh ruang yang tersedia
-                .padding(padding)  // Padding untuk menghindari tumpang tindih dengan system bars
-                .background(Color.White)  // Latar belakang putih
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(padding) // Tambahkan padding dari Scaffold
         ) {
-            // Baris untuk tombol Atlet dan Pengurus
+            // Header dengan tombol toggle
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
-                    .padding(bottom = 8.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 // Tombol Atlet
                 Button(
                     onClick = { showAtlet = true },
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 4.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (showAtlet) 
                             Color(0xFF2196F3)  // Biru untuk tombol aktif
@@ -84,13 +94,12 @@ fun ListScreen(
                     Spacer(modifier = Modifier.width(8.dp))
                     Text("Atlet")
                 }
-
+                
+                Spacer(modifier = Modifier.width(8.dp))
+                
                 // Tombol Pengurus
                 Button(
                     onClick = { showAtlet = false },
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 4.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (!showAtlet) 
                             Color(0xFF2196F3)  // Biru untuk tombol aktif
@@ -114,12 +123,41 @@ fun ListScreen(
 
             // Menampilkan konten berdasarkan state yang aktif
             if (showAtlet) {
+                // Tombol Tambah Atlet kecil di kiri
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Button(
+                        onClick = { 
+                            showAddDialog = true
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF2196F3)
+                        )
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.tambah),
+                            contentDescription = "Tambah Atlet",
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text("Tambah", fontSize = 12.sp)
+                    }
+                }
+                
                 // Menampilkan daftar atlet
                 AtletList(
                     atlets = atlets,
                     isLoading = isLoading,
                     onDeleteAtlet = { atlet ->
                         atletViewModel.deleteAtlet(atlet)
+                    },
+                    onEditAtlet = { atlet ->
+                        selectedAtlet = atlet
+                        showEditDialog = true
                     }
                 )
             } else {
@@ -132,10 +170,40 @@ fun ListScreen(
                         text = "Daftar Pengurus",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1976D2)
+                        color = Color.Gray
                     )
                 }
             }
+        }
+        
+        // Dialog tambah atlet
+        if (showAddDialog) {
+            AddAtletDialog(
+                onDismiss = { showAddDialog = false },
+                onAddAtlet = { newAtlet ->
+                    atletViewModel.insertAtlet(newAtlet)
+                    showAddDialog = false
+                }
+            )
+        }
+        
+        // Dialog edit atlet
+        if (showEditDialog && selectedAtlet != null) {
+            EditAtletDialog(
+                atlet = selectedAtlet!!,
+                onDismiss = { 
+                    showEditDialog = false
+                    selectedAtlet = null
+                },
+                onUpdateAtlet = { updatedAtlet ->
+                    atletViewModel.updateAtlet(updatedAtlet)
+                    showEditDialog = false
+                    selectedAtlet = null
+                },
+                checkNimExists = { newNim, currentNim ->
+                    atletViewModel.checkNimExists(newNim, currentNim)
+                }
+            )
         }
     }
 }

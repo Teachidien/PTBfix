@@ -52,6 +52,12 @@ class DatabaseRepository @Inject constructor(
     
     suspend fun getAtletByNim(nim: String): Atlet? = atletDao.getAtletByNim(nim)
     
+    suspend fun checkNimExists(newNim: String, currentNim: String): Boolean {
+        if (newNim == currentNim) return false // NIM tidak berubah
+        val existingAtlet = getAtletByNim(newNim)
+        return existingAtlet != null
+    }
+    
     fun getAtletsByProdi(prodi: String): Flow<List<Atlet>> = atletDao.getAtletsByProdi(prodi)
     
     suspend fun insertAtlet(atlet: Atlet) = atletDao.insertAtlet(atlet)
@@ -64,16 +70,16 @@ class DatabaseRepository @Inject constructor(
     
     suspend fun insertDummyAtlets() {
         val dummyAtlets = listOf(
-            Atlet("2021001", "Ahmad Rizki", "Teknik Informatika", 85, 90, 88),
-            Atlet("2021002", "Siti Nurhaliza", "Sistem Informasi", 78, 82, 80),
-            Atlet("2021003", "Budi Santoso", "Teknik Elektro", 92, 85, 90),
-            Atlet("2021004", "Dewi Lestari", "Manajemen", 88, 86, 84),
-            Atlet("2021005", "Eko Prasetyo", "Akuntansi", 80, 88, 82),
-            Atlet("2021006", "Fitri Handayani", "Teknik Mesin", 86, 84, 87),
-            Atlet("2021007", "Hendra Wijaya", "Teknik Sipil", 90, 89, 91),
-            Atlet("2021008", "Indah Permata", "Psikologi", 83, 81, 85),
-            Atlet("2021009", "Joko Widodo", "Hukum", 87, 83, 86),
-            Atlet("2021010", "Kartika Sari", "Kedokteran", 91, 87, 89)
+            Atlet("2021001", "Ahmad Rizki", "Teknik Informatika", "15/01/02"),
+            Atlet("2021002", "Siti Nurhaliza", "Sistem Informasi", "22/03/02"),
+            Atlet("2021003", "Budi Santoso", "Teknik Elektro", "10/07/01"),
+            Atlet("2021004", "Dewi Lestari", "Manajemen", "05/12/02"),
+            Atlet("2021005", "Eko Prasetyo", "Akuntansi", "18/09/01"),
+            Atlet("2021006", "Fitri Handayani", "Teknik Mesin", "25/04/02"),
+            Atlet("2021007", "Hendra Wijaya", "Teknik Sipil", "12/11/01"),
+            Atlet("2021008", "Indah Permata", "Psikologi", "08/06/02"),
+            Atlet("2021009", "Joko Widodo", "Hukum", "30/08/01"),
+            Atlet("2021010", "Kartika Sari", "Kedokteran", "14/02/02")
         )
         atletDao.insertAtlets(dummyAtlets)
     }
