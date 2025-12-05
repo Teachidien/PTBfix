@@ -33,24 +33,6 @@ fun ListScreen() {
         // AppBar di bagian atas layar
         topBar = {
             AppTopBar(title = "Daftar")  // Menampilkan judul "Daftar" di AppBar
-        },
-        // Tombol mengambang di pojok kanan bawah
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { 
-                    // TODO: Tambahkan aksi untuk menambahkan data baru
-                    // Akan diimplementasikan nanti
-                },
-                containerColor = Color(0xFF2196F3),  // Warna latar tombol
-                contentColor = Color.White  // Warna ikon
-            ) {
-                // Ikon plus untuk menambahkan data
-                Icon(
-                    painter = painterResource(id = R.drawable.tambah),
-                    contentDescription = "Tambah Data",  // Penting untuk aksesibilitas
-                    modifier = Modifier.size(24.dp)  // Ukuran ikon
-                )
-            }
         }
     ) { padding ->
         // Kolom utama untuk menata konten secara vertikal
@@ -121,24 +103,36 @@ fun ListScreen() {
                 }
             }
 
-            // Menampilkan teks berdasarkan state yang aktif
+            // Menampilkan teks atau tombol berdasarkan state yang aktif
             if (showAtlet) {
-                // Menampilkan teks Daftar Atlet
-                Text(
-                    text = "Daftar Atlet",  // Teks yang ditampilkan
-                    modifier = Modifier.padding(16.dp),  // Jarak dari tepi
-                    fontSize = 24.sp,  // Ukuran teks 24 scale-independent pixels
-                    fontWeight = FontWeight.Bold,  // Teks tebal
-                    color = Color(0xFF1976D2)  // Warna teks biru
-                )
+                // Tombol Tambah Atlet
+                Button(
+                    onClick = { 
+                        // TODO: Tambahkan aksi untuk menambahkan atlet baru
+                    },
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF2196F3)
+                    )
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.tambah),
+                        contentDescription = "Tambah Atlet",
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Tambah Atlet")
+                }
             } else {
                 // Menampilkan teks Daftar Pengurus
                 Text(
-                    text = "Daftar Pengurus",  // Teks yang ditampilkan
-                    modifier = Modifier.padding(16.dp),  // Jarak dari tepi
-                    fontSize = 24.sp,  // Ukuran teks 24 scale-independent pixels
-                    fontWeight = FontWeight.Bold,  // Teks tebal
-                    color = Color(0xFF1976D2)  // Warna teks biru
+                    text = "Daftar Pengurus",
+                    modifier = Modifier.padding(16.dp),
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF1976D2)
                 )
             }
         }

@@ -1,8 +1,11 @@
 package com.example.ptbfix.data.local
 
+import com.example.ptbfix.data.local.Note
+import com.example.ptbfix.data.local.User
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
+import dagger.hilt.android.scopes.ViewModelScoped
 
 @Singleton
 class DatabaseRepository @Inject constructor(
