@@ -30,6 +30,25 @@ import com.example.ptbfix.ui.screens.ListScreen
 import com.example.ptbfix.ui.screens.TeamScreen
 import android.util.Log
 import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        
+        enableEdgeToEdge()
+        
+        // Menetapkan konten UI menggunakan Jetpack Compose
+        setContent {
+            // Menerapkan tema kustom aplikasi
+            PTBfixTheme {
+                // Menampilkan layar utama aplikasi
+                MainScreen()
+            }
+        }
+    }
+}
 
 /**
  * Komponen utama yang menangani navigasi antar layar dalam aplikasi.
@@ -198,23 +217,5 @@ fun MainScreen() {
         contentAlignment = Alignment.Center
     ) {
         Text(text = serverMessage, style = MaterialTheme.typography.titleMedium)
-    }
-}
-
-
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        
-        enableEdgeToEdge()
-        
-        // Menetapkan konten UI menggunakan Jetpack Compose
-        setContent {
-            // Menerapkan tema kustom aplikasi
-            PTBfixTheme {
-                // Menampilkan layar utama aplikasi
-                MainScreen()
-            }
-        }
     }
 }

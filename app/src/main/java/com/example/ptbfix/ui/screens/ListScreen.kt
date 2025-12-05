@@ -14,18 +14,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.ptbfix.R
 import com.example.ptbfix.ui.components.AppTopBar
+import com.example.ptbfix.ui.components.AtletList
 import com.example.ptbfix.ui.theme.PTBfixTheme
+import com.example.ptbfix.ui.viewmodel.AtletViewModel
 
 // File ini berisi implementasi layar Daftar (ListScreen)
 // yang menampilkan daftar atlet dan pengurus
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListScreen() {
+fun ListScreen(
+    atletViewModel: AtletViewModel = hiltViewModel()
+) {
     // State untuk menentukan apakah yang ditampilkan adalah daftar atlet (true) atau pengurus (false)
     var showAtlet by remember { mutableStateOf(true) }
+    
+    // Collect state dari ViewModel
+    val atlets by atletViewModel.atlets.collectAsState()
+    val isLoading by atletViewModel.isLoading.collectAsState()
     
     // Scaffold sebagai layout utama yang menyediakan struktur dasar Material Design
     // termasuk AppBar, FloatingActionButton, dll.
@@ -103,37 +112,29 @@ fun ListScreen() {
                 }
             }
 
-            // Menampilkan teks atau tombol berdasarkan state yang aktif
+            // Menampilkan konten berdasarkan state yang aktif
             if (showAtlet) {
-                // Tombol Tambah Atlet
-                Button(
-                    onClick = { 
-                        // TODO: Tambahkan aksi untuk menambahkan atlet baru
-                    },
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF2196F3)
-                    )
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.tambah),
-                        contentDescription = "Tambah Atlet",
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Tambah Atlet")
-                }
+                // Menampilkan daftar atlet
+                AtletList(
+                    atlets = atlets,
+                    isLoading = isLoading,
+                    onDeleteAtlet = { atlet ->
+                        atletViewModel.deleteAtlet(atlet)
+                    }
+                )
             } else {
                 // Menampilkan teks Daftar Pengurus
-                Text(
-                    text = "Daftar Pengurus",
-                    modifier = Modifier.padding(16.dp),
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF1976D2)
-                )
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Daftar Pengurus",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF1976D2)
+                    )
+                }
             }
         }
     }
