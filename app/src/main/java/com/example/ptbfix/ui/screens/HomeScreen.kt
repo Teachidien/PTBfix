@@ -15,12 +15,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.ptbfix.data.local.Event
 import com.example.ptbfix.ui.components.AppTopBar
 import com.example.ptbfix.ui.theme.*
+import com.example.ptbfix.ui.utils.calculateDaysUntil
+import com.example.ptbfix.ui.utils.findNearestEvent
+import com.example.ptbfix.ui.viewmodel.EventViewModel
+import com.example.ptbfix.ui.viewmodel.AtletViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    eventViewModel: EventViewModel = hiltViewModel(),
+    atletViewModel: AtletViewModel = hiltViewModel()
+) {
+    val events by eventViewModel.events.collectAsState()
+    val nearestEvent = remember(events) { findNearestEvent(events) }
+    val atlets by atletViewModel.atlets.collectAsState()
     Scaffold(
         topBar = {
             AppTopBar(title = "Beranda")
@@ -63,13 +75,22 @@ fun HomeScreen() {
                             textAlign = TextAlign.Center
                         )
                     }
-                    // 75% bawah berwarna putih
+                    // 75% bawah berwarna putih dengan jumlah atlet
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(0.75f)
-                            .background(Color.White)
-                    )
+                            .background(Color.White),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "${atlets.size}",
+                            fontSize = 36.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF2196F3),
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
                 
                 // Kotak 2
@@ -168,13 +189,54 @@ fun HomeScreen() {
                             textAlign = TextAlign.Center
                         )
                     }
-                    // 75% bawah berwarna putih
+                    // 75% bawah berwarna putih dengan event info
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(0.75f)
-                            .background(Color.White)
-                    )
+                            .background(Color.White),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (nearestEvent != null) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = nearestEvent.namaEvent,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFF1976D2),
+                                    textAlign = TextAlign.Center,
+                                    maxLines = 2
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = nearestEvent.tanggalEvent,
+                                    fontSize = 10.sp,
+                                    color = Color.Gray,
+                                    textAlign = TextAlign.Center
+                                )
+                                Spacer(modifier = Modifier.height(2.dp))
+                                Text(
+                                    text = calculateDaysUntil(nearestEvent.tanggalEvent),
+                                    fontSize = 10.sp,
+                                    color = Color(0xFF2196F3),
+                                    fontWeight = FontWeight.Medium,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        } else {
+                            Text(
+                                text = "Belum ada\nevent\nterdekat",
+                                fontSize = 10.sp,
+                                color = Color.Gray,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
                 }
             }
         }

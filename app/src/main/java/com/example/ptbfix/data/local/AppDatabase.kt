@@ -6,8 +6,8 @@ import androidx.room.RoomDatabase
 import android.content.Context
 
 @Database(
-    entities = [User::class, Note::class, Atlet::class],
-    version = 3,
+    entities = [User::class, Note::class, Atlet::class, Event::class],
+    version = 4,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -15,6 +15,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun noteDao(): NoteDao
     abstract fun atletDao(): AtletDao
+    abstract fun eventDao(): EventDao
 
     companion object {
         @Volatile

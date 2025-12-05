@@ -9,5 +9,5 @@ import dagger.hilt.android.HiltAndroidApp
 class PTBApplication : Application() {
     
     val database by lazy { AppDatabase.getDatabase(this) }
-    val repository by lazy { DatabaseRepository(database.userDao(), database.noteDao(), database.atletDao()) }
+    val repository by lazy { DatabaseRepository(database.userDao(), database.noteDao(), database.atletDao(), database.eventDao()) }
 }

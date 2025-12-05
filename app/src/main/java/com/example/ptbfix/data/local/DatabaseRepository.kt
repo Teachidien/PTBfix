@@ -3,16 +3,17 @@ package com.example.ptbfix.data.local
 import com.example.ptbfix.data.local.Note
 import com.example.ptbfix.data.local.User
 import com.example.ptbfix.data.local.Atlet
+import com.example.ptbfix.data.local.Event
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
-import dagger.hilt.android.scopes.ViewModelScoped
 
 @Singleton
 class DatabaseRepository @Inject constructor(
     private val userDao: UserDao,
     private val noteDao: NoteDao,
-    private val atletDao: AtletDao
+    private val atletDao: AtletDao,
+    private val eventDao: EventDao
 ) {
     
     // User operations
@@ -83,4 +84,19 @@ class DatabaseRepository @Inject constructor(
         )
         atletDao.insertAtlets(dummyAtlets)
     }
+    
+    // Event operations
+    fun getAllEvents(): Flow<List<Event>> = eventDao.getAllEvents()
+    
+    suspend fun getEventById(id: Long): Event? = eventDao.getEventById(id)
+    
+    suspend fun insertEvent(event: Event): Long = eventDao.insertEvent(event)
+    
+    suspend fun updateEvent(event: Event) = eventDao.updateEvent(event)
+    
+    suspend fun deleteEvent(event: Event) = eventDao.deleteEvent(event)
+    
+    suspend fun deleteEventById(id: Long) = eventDao.deleteEventById(id)
+    
+    suspend fun deleteAllEvents() = eventDao.deleteAllEvents()
 }
